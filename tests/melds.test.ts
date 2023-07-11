@@ -19,7 +19,7 @@ describe('findMelds', () => {
   test('kan over chi priority', () => {
     const tiles: ReadonlyArray<Tile> = shuffle([
       'pin-2', 'pin-3', 'pin-4',
-      'man-5r', 'man-5r', 'man-5r', 'man-5r',
+      'man-5r', 'man-5', 'man-5', 'man-5',
       'dragon-red', 'dragon-red', 'dragon-red',
       'wind-east', 'wind-east', 'wind-east',
       'sou-9', 'sou-9'
@@ -27,7 +27,7 @@ describe('findMelds', () => {
 
     const melds: ReadonlyArray<Meld> = [
       { kind: 'chi', value: [ 'pin-2', 'pin-3', 'pin-4' ] },
-      { kind: 'kan', value: [ 'man-5r', 'man-5r', 'man-5r', 'man-5r' ] },
+      { kind: 'kan', value: [ 'man-5r', 'man-5', 'man-5', 'man-5' ] },
       { kind: 'pon', value: [ 'dragon-red', 'dragon-red', 'dragon-red' ] },
       { kind: 'pon', value: [ 'wind-east', 'wind-east', 'wind-east' ] },
       { kind: 'pair', value: [ 'sou-9', 'sou-9' ] },
