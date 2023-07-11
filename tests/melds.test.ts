@@ -76,6 +76,30 @@ describe('findMelds', () => {
     arrayMatch(findMelds(tiles), melds);
   });
 
+  test('seven pairs', () => {
+    const tiles: ReadonlyArray<Tile> = shuffle([
+      'pin-1', 'pin-1',
+      'sou-9', 'sou-9',
+      'man-5r', 'man-5',
+      'wind-east', 'wind-east',
+      'dragon-red', 'dragon-red',
+      'sou-5', 'sou-5r',
+      'wind-south', 'wind-south',
+    ]);
+
+    const melds: ReadonlyArray<Meld> = [
+      { kind: 'pair', value: [ 'pin-1', 'pin-1' ] },
+      { kind: 'pair', value: [ 'sou-9', 'sou-9' ] },
+      { kind: 'pair', value: [ 'man-5r', 'man-5' ] },
+      { kind: 'pair', value: [ 'wind-east', 'wind-east' ] },
+      { kind: 'pair', value: [ 'dragon-red', 'dragon-red' ] },
+      { kind: 'pair', value: [ 'sou-5r', 'sou-5' ] },
+      { kind: 'pair', value: [ 'wind-south', 'wind-south' ] },
+    ];
+
+    arrayMatch(findMelds(tiles), melds);
+  });
+
   test('thirteen orphans', () => {
     const tiles: ReadonlyArray<Tile> = shuffle([
       'pin-1', 'pin-9',
