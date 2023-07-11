@@ -81,6 +81,7 @@ export type PinTile      = typeof pinTiles[number];
 export type SouTile      = typeof souTiles[number];
 export type ManTile      = typeof manTiles[number];
 export type NumberTile   = PinTile | SouTile | ManTile;
+export type Five         = typeof pinTiles[4] | typeof souTiles[4] | typeof manTiles[4];
 
 export type TerminalTile = typeof terminalTiles[number];
 export type SimpleTile   = Exclude<NumberTile, TerminalTile>;
