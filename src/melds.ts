@@ -1,5 +1,5 @@
 import { NumberTile, Tile, isNumber } from './types/tile';
-import { KanTuple, Meld, PairTuple, PonTuple, chiForNumber } from './types/meld';
+import { Meld, kanForTile, ponForTile, pairForTile, chiForNumber } from './types/meld';
 
 // Find the melds within the given set of tiles
 // General strategy:
@@ -66,11 +66,11 @@ const findCandidateMelds = (tiles: ReadonlyArray<Tile>): ReadonlyArray<Meld> => 
 
     // Generate [chi, kan, pon, pair] Meld for the given tile
     if (isNumber(tile)) {
-      chiForNumber(tile as NumberTile).forEach((chi) => tileMelds.push(chi));
+      tileMelds.push(...chiForNumber(tile as NumberTile));
     }
-    tileMelds.push({ kind: 'kan',  value: [tile, tile, tile, tile] as KanTuple });
-    tileMelds.push({ kind: 'pon',  value: [tile, tile, tile] as PonTuple });
-    tileMelds.push({ kind: 'pair', value: [tile, tile] as PairTuple });
+    tileMelds.push(...kanForTile(tile));
+    tileMelds.push(...ponForTile(tile));
+    tileMelds.push(...pairForTile(tile));
 
     // Filter by melds that are actually possible for the given hand
     const validMelds = tileMelds.filter(c => isValidMeld(c, tiles));
