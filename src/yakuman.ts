@@ -1,6 +1,7 @@
 import { Tile } from './types/tile';
 import { Meld } from './types/meld';
 import { CalculateParams } from './calculate';
+import { removeFirstInstance, arrayCmp } from './helpers';
 
 export type Yakuman =
   | 'thirteen-orphans'
@@ -27,7 +28,41 @@ const DEALER_SCORE     = 48_000;
 const NON_DEALER_SCORE = 32_000;
 
 const isThirteenOrphans = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  throw new Error('Not implemented!');
+  // Closed only
+  if (params.winState.open) {
+    return false;
+  }
+
+  // 14 tiles only
+  if (tiles.length !== 14) {
+    return false;
+  }
+
+  // Only one meld...
+  if (melds.length !== 1) {
+    return false;
+  }
+
+  // ...that is a pair
+  if (melds[0].kind !== 'pair') {
+    return false;
+  }
+
+  // Remove one of the pair tiles from the hand and sort
+  const pairTile = melds[0].value[0];
+  const inputTilesNoPair = removeFirstInstance(tiles, pairTile);
+  const inputTilesNoPairSorted = [...inputTilesNoPair].sort();
+
+  const thirteenOrphansSorted: Tile[] = [
+    'dragon-green', 'dragon-red', 'dragon-white',
+    'man-1', 'man-9',
+    'pin-1', 'pin-9',
+    'sou-1', 'sou-9',
+    'wind-east', 'wind-north', 'wind-south', 'wind-west',
+  ];
+
+  // The remaning sorted tiles should equal this array
+  return arrayCmp(thirteenOrphansSorted, inputTilesNoPairSorted);
 }
 
 const isFourConcealedTriplets = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
