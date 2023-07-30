@@ -1,19 +1,8 @@
+import { shuffle, arrayMatch } from './helpers';
+
 import { Tile } from '../src/types/tile';
 import { Meld } from '../src/types/meld';
 import { findMelds } from '../src/melds';
-
-// Simple array shuffle
-const shuffle = <T>(input: ReadonlyArray<T>): ReadonlyArray<T> =>
-  input
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
-
-// Matches contents of arrays unsorted
-const arrayMatch = <T>(actual: ReadonlyArray<T>, expected: ReadonlyArray<T>): void => {
-  expect(actual).toEqual(expect.arrayContaining(expected));
-  expect(expected).toEqual(expect.arrayContaining(actual));
-};
 
 describe('findMelds', () => {
   test('kan over chi priority', () => {
