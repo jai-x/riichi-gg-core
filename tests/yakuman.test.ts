@@ -26,4 +26,22 @@ describe('findYakuman', () => {
       expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: 'thirteen-orphans'});
     });
   });
+
+  describe('four concealed triplets', () => {
+    const tiles: Tile[] = [
+      'pin-1', 'pin-1', 'pin-1',
+      'sou-9', 'sou-9', 'sou-9', 'sou-9',
+      'man-5r', 'man-5', 'man-5',
+      'wind-east', 'wind-east', 'wind-east',
+      'dragon-red', 'dragon-red',
+    ];
+    const melds = findMelds(tiles);
+
+    test('it returns four concealed triplets', () => {
+      // @ts-expect-error
+      const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: 'four-concealed-triplets'});
+    });
+  });
 });

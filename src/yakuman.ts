@@ -66,7 +66,27 @@ const isThirteenOrphans = ({ tiles, melds, params }: YakumanCheckerParams): bool
 }
 
 const isFourConcealedTriplets = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  throw new Error('Not implemented!');
+  // Closed only
+  if (params.winState.open) {
+    return false;
+  }
+
+  // Four pons/kans and one pair
+  if (melds.length !== 5) {
+    return false;
+  }
+
+  // Four pons/kans
+  if (melds.filter((meld) => meld.kind === 'pon' || meld.kind === 'kan').length !== 4) {
+    return false;
+  }
+
+  // One pair
+  if (melds.filter((meld) => meld.kind === 'pair').length !== 1) {
+    return false;
+  }
+
+  return true;
 }
 
 const isBigThreeDragons = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
