@@ -118,8 +118,9 @@ const isAllTerminals = ({ tiles, melds, params }: YakumanCheckerParams): boolean
 }
 
 const isAllGreens = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  // TODO: Implement
-  return false;
+  const greens = ['sou-2', 'sou-3', 'sou-4', 'sou-6', 'sou-8', 'dragon-green'];
+
+  return tiles.every((tile) => greens.includes(tile));
 }
 
 const isNineGates = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {

@@ -146,4 +146,26 @@ describe('findYakuman', () => {
       });
     });
   });
+
+  describe('all greens', () => {
+    const tiles: Tile[] = [
+      'sou-2', 'sou-3', 'sou-4',
+      'sou-2', 'sou-3', 'sou-4',
+      'sou-6', 'sou-6', 'sou-6',
+      'sou-8', 'sou-8', 'sou-8', 'sou-8',
+      'dragon-green', 'dragon-green',
+    ];
+    const melds = findMelds(tiles);
+
+    test('it returns all greens', () => {
+      // @ts-expect-error
+      const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+      expect(result).toStrictEqual({
+        ok: true,
+        score: 32000,
+        yakuman: ['all-greens'],
+      });
+    });
+  });
 });
