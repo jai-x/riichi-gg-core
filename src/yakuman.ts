@@ -16,7 +16,7 @@ export type Yakuman =
 
 export type YakumanResult =
   | { ok: false }
-  | { ok: true, score: number, yakuman: Yakuman };
+  | { ok: true, score: number, yakuman: ReadonlyArray<Yakuman> };
 
 interface YakumanCheckerParams {
   tiles: ReadonlyArray<Tile>;
@@ -90,52 +90,21 @@ const isFourConcealedTriplets = ({ tiles, melds, params }: YakumanCheckerParams)
 }
 
 const isBigThreeDragons = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  const ponsAndKans = melds.filter((meld) => meld.kind === 'pon' || meld.kind === 'kan');
-
-  // At least three pon/kan
-  if (ponsAndKans.length < 3) {
-    return false;
-  }
-
-  let dragonPonKan = 0;
-  for (const meld of ponsAndKans) {
-    if (isDragon(meld.value[0])) {
-      dragonPonKan += 1;
-    }
-  }
-
-  return dragonPonKan === 3;
+  const dragonPonKans = melds.filter((meld) => {
+    return (meld.kind === 'pon' || meld.kind === 'kan') && isDragon(meld.value[0]);
+  });
+  
+  return dragonPonKans.length === 3;
 }
 
 const isLittleFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  const pairs = melds.filter((meld) => meld.kind === 'pair');
+  const windPairs = melds.filter((meld) => meld.kind === 'pair' && isWind(meld.value[0]));
 
-  // One pair
-  if (pairs.length !== 1) {
-    return false;
-  }
+  const windPonKans = melds.filter((meld) => {
+    return (meld.kind === 'pon' || meld.kind === 'kan') && isWind(meld.value[0]);
+  });
 
-  // Wind pair
-  if (!isWind(pairs[0].value[0])) {
-    return false;
-  }
-
-  const ponsAndKans = melds.filter((meld) => meld.kind === 'pon' || meld.kind === 'kan');
-
-  // At least three pon/kan
-  if (ponsAndKans.length < 3) {
-    return false;
-  }
-
-  // Three wind pon/kan
-  let windPonKan = 0;
-  for (const meld of ponsAndKans) {
-    if (isWind(meld.value[0])) {
-      windPonKan += 1;
-    }
-  }
-
-  return windPonKan === 3;
+  return windPairs.length === 1 && windPonKans.length === 3;
 }
 
 const isBigFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
@@ -143,19 +112,23 @@ const isBigFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean
 }
 
 const isAllHonours = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  throw new Error('Not implemented!');
+  // TODO: Implement
+  return false;
 }
 
 const isAllTerminals = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  throw new Error('Not implemented!');
+  // TODO: Implement
+  return false;
 }
 
 const isAllGreens = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  throw new Error('Not implemented!');
+  // TODO: Implement
+  return false;
 }
 
 const isNineGates = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  throw new Error('Not implemented!');
+  // TODO: Implement
+  return false;
 }
 
 const yakumanCheckers: Record<Yakuman, (y: YakumanCheckerParams) => boolean> = {
@@ -175,6 +148,9 @@ export const findYakuman = (
   melds: ReadonlyArray<Meld>,
   params: CalculateParams,
 ): YakumanResult => {
+  let finalScore = 0;
+  let finalYakuman: Yakuman[] = [];
+  
   for (const key in yakumanCheckers) {
     const yakuman = key as Yakuman;
     const checker = yakumanCheckers[yakuman];
@@ -183,9 +159,14 @@ export const findYakuman = (
     if (found) {
       const score = params.dealer ? DEALER_SCORE : NON_DEALER_SCORE;
 
-      return { ok: true, score: score, yakuman: yakuman };
+      finalScore += score;
+      finalYakuman.push(yakuman);
     }
   }
 
-  return { ok: false }
+  if (!finalScore) {
+    return { ok: false };
+  }
+
+  return { ok: true, score: finalScore, yakuman: finalYakuman };
 };

@@ -23,7 +23,7 @@ describe('findYakuman', () => {
       // @ts-expect-error
       const result = findYakuman(hand, melds, { dealer: false, winState: { open: false }});
 
-      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: 'thirteen-orphans'});
+      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: ['thirteen-orphans']});
     });
   });
 
@@ -41,7 +41,7 @@ describe('findYakuman', () => {
       // @ts-expect-error
       const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
 
-      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: 'four-concealed-triplets'});
+      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: ['four-concealed-triplets']});
     });
   });
 
@@ -59,7 +59,7 @@ describe('findYakuman', () => {
       // @ts-expect-error
       const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
 
-      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: 'big-three-dragons'});
+      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: ['big-three-dragons']});
     });
   });
 
@@ -77,7 +77,7 @@ describe('findYakuman', () => {
       // @ts-expect-error
       const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
 
-      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: 'little-four-winds'});
+      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: ['little-four-winds']});
     });
   });
 });
