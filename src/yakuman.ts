@@ -1,4 +1,4 @@
-import { Tile, isDragon } from './types/tile';
+import { Tile, isDragon, isWind } from './types/tile';
 import { Meld } from './types/meld';
 import { CalculateParams } from './calculate';
 import { removeFirstInstance, arrayCmp } from './helpers';
@@ -108,7 +108,34 @@ const isBigThreeDragons = ({ tiles, melds, params }: YakumanCheckerParams): bool
 }
 
 const isLittleFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  throw new Error('Not implemented!');
+  const pairs = melds.filter((meld) => meld.kind === 'pair');
+
+  // One pair
+  if (pairs.length !== 1) {
+    return false;
+  }
+
+  // Wind pair
+  if (!isWind(pairs[0].value[0])) {
+    return false;
+  }
+
+  const ponsAndKans = melds.filter((meld) => meld.kind === 'pon' || meld.kind === 'kan');
+
+  // At least three pon/kan
+  if (ponsAndKans.length < 3) {
+    return false;
+  }
+
+  // Three wind pon/kan
+  let windPonKan = 0;
+  for (const meld of ponsAndKans) {
+    if (isWind(meld.value[0])) {
+      windPonKan += 1;
+    }
+  }
+
+  return windPonKan === 3;
 }
 
 const isBigFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
