@@ -80,4 +80,26 @@ describe('findYakuman', () => {
       expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: ['little-four-winds']});
     });
   });
+
+  describe('big four winds', () => {
+    const tiles: Tile[] = [
+      'wind-east', 'wind-east', 'wind-east',
+      'wind-south', 'wind-south', 'wind-south',
+      'wind-west', 'wind-west', 'wind-west',
+      'wind-north', 'wind-north', 'wind-north',
+      'man-5r', 'man-5',
+    ];
+    const melds = findMelds(tiles);
+
+    test('it returns big four winds', () => {
+      // @ts-expect-error
+      const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+      expect(result).toStrictEqual({
+        ok: true,
+        score: 64000,
+        yakuman: ['four-concealed-triplets', 'big-four-winds'],
+      });
+    });
+  });
 });

@@ -108,7 +108,11 @@ const isLittleFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): bool
 }
 
 const isBigFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  throw new Error('Not implemented!');
+  const windPonKans = melds.filter((meld) => {
+    return (meld.kind === 'pon' || meld.kind === 'kan') && isWind(meld.value[0]);
+  });
+
+  return windPonKans.length === 4;
 }
 
 const isAllHonours = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
