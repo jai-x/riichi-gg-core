@@ -105,4 +105,29 @@ describe('findMelds', () => {
 
     arrayMatch(findMelds(tiles), melds);
   });
+
+  test('nine gates', () => {
+    const tiles: ReadonlyArray<Tile> = shuffle([
+      'pin-1', 'pin-1', 'pin-1',
+      'pin-2',
+      'pin-3',
+      'pin-4',
+      'pin-5',
+      'pin-6',
+      'pin-7',
+      'pin-8',
+      'pin-9', 'pin-9', 'pin-9',
+      'pin-5r',
+    ]);
+
+    const expectedMelds: ReadonlyArray<Meld> = [
+      { kind: 'pon', value: [ 'pin-1', 'pin-1', 'pin-1' ] },
+      { kind: 'pon', value: [ 'pin-9', 'pin-9', 'pin-9' ] },
+      { kind: 'pair', value: [ 'pin-5r', 'pin-5' ] },
+      { kind: 'chi', value: [ 'pin-2', 'pin-3', 'pin-4' ] },
+      { kind: 'chi', value: [ 'pin-6', 'pin-7', 'pin-8' ] },
+    ];
+
+    arrayMatch(findMelds(tiles), expectedMelds);
+  });
 });
