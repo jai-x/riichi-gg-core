@@ -38,18 +38,14 @@ const isThirteenOrphans = ({ tiles, melds, params }: YakumanCheckerParams): bool
     return false;
   }
 
-  // Only one meld...
-  if (melds.length !== 1) {
-    return false;
-  }
-
-  // ...that is a pair
-  if (melds[0].kind !== 'pair') {
-    return false;
+  // One pair
+  const pairs = melds.filter((meld) => meld.kind === 'pair');
+  if (pairs.length !== 1) {
+    return false
   }
 
   // Remove one of the pair tiles from the hand and sort
-  const pairTile = melds[0].value[0];
+  const pairTile = pairs[0].value[0];
   const inputTilesNoPair = removeFirstInstance(tiles, pairTile);
   const inputTilesNoPairSorted = [...inputTilesNoPair].sort();
 
@@ -66,33 +62,17 @@ const isThirteenOrphans = ({ tiles, melds, params }: YakumanCheckerParams): bool
 }
 
 const isFourConcealedTriplets = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  // Closed only
-  if (params.winState.open) {
-    return false;
-  }
+  const pairs = melds.filter((meld) => ['pair'].includes(meld.kind));
 
-  // Four pons/kans and one pair
-  if (melds.length !== 5) {
-    return false;
-  }
+  const ponsKans = melds.filter((meld) => ['pon', 'kan'].includes(meld.kind));
 
-  // Four pons/kans
-  if (melds.filter((meld) => meld.kind === 'pon' || meld.kind === 'kan').length !== 4) {
-    return false;
-  }
-
-  // One pair
-  if (melds.filter((meld) => meld.kind === 'pair').length !== 1) {
-    return false;
-  }
-
-  return true;
+  return !params.winState.open && pairs.length === 1 && ponsKans.length === 4 && melds.length === 5;
 }
 
 const isBigThreeDragons = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  const dragonPonKans = melds.filter((meld) => {
-    return (meld.kind === 'pon' || meld.kind === 'kan') && isDragon(meld.value[0]);
-  });
+  const dragonPonKans = melds.filter((meld) =>
+    ['pon', 'kan'].includes(meld.kind) && isDragon(meld.value[0])
+  );
   
   return dragonPonKans.length === 3;
 }
@@ -100,17 +80,17 @@ const isBigThreeDragons = ({ tiles, melds, params }: YakumanCheckerParams): bool
 const isLittleFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
   const windPairs = melds.filter((meld) => meld.kind === 'pair' && isWind(meld.value[0]));
 
-  const windPonKans = melds.filter((meld) => {
-    return (meld.kind === 'pon' || meld.kind === 'kan') && isWind(meld.value[0]);
-  });
+  const windPonKans = melds.filter((meld) =>
+    ['pon', 'kan'].includes(meld.kind) && isWind(meld.value[0])
+  );
 
   return windPairs.length === 1 && windPonKans.length === 3;
 }
 
 const isBigFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  const windPonKans = melds.filter((meld) => {
-    return (meld.kind === 'pon' || meld.kind === 'kan') && isWind(meld.value[0]);
-  });
+  const windPonKans = melds.filter((meld) =>
+    ['pon', 'kan'].includes(meld.kind) && isWind(meld.value[0])
+  );
 
   return windPonKans.length === 4;
 }
