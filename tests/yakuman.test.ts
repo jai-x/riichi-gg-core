@@ -102,4 +102,26 @@ describe('findYakuman', () => {
       });
     });
   });
+
+  describe('all honours', () => {
+    const tiles: Tile[] = [
+      'wind-east', 'wind-east', 'wind-east',
+      'wind-south', 'wind-south', 'wind-south',
+      'dragon-red', 'dragon-red', 'dragon-red',
+      'dragon-white', 'dragon-white', 'dragon-white',
+      'wind-west', 'wind-west',
+    ];
+    const melds = findMelds(tiles);
+
+    test('it returns all honours', () => {
+      // @ts-expect-error
+      const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+      expect(result).toStrictEqual({
+        ok: true,
+        score: 64000,
+        yakuman: ['four-concealed-triplets', 'all-honours'],
+      });
+    });
+  });
 });

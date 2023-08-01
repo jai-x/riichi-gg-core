@@ -1,4 +1,4 @@
-import { Tile, isDragon, isWind } from './types/tile';
+import { Tile, isDragon, isHonour, isWind } from './types/tile';
 import { Meld } from './types/meld';
 import { CalculateParams } from './calculate';
 import { removeFirstInstance, arrayCmp } from './helpers';
@@ -116,8 +116,15 @@ const isBigFourWinds = ({ tiles, melds, params }: YakumanCheckerParams): boolean
 }
 
 const isAllHonours = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  // TODO: Implement
-  return false;
+  const honourPairs = melds.filter((meld) =>
+    ['pair'].includes(meld.kind) && isHonour(meld.value[0])
+  );
+
+  const honourPonKans = melds.filter((meld) =>
+     ['pon', 'kan'].includes(meld.kind) && isHonour(meld.value[0])
+  );
+
+  return honourPairs.length === 1 && honourPonKans.length === 4 && melds.length === 5;
 }
 
 const isAllTerminals = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
