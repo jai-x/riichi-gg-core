@@ -44,4 +44,22 @@ describe('findYakuman', () => {
       expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: 'four-concealed-triplets'});
     });
   });
+
+  describe('big three dragons', () => {
+    const tiles: Tile[] = [
+      'dragon-red', 'dragon-red', 'dragon-red',
+      'dragon-green', 'dragon-green', 'dragon-green',
+      'dragon-white', 'dragon-white', 'dragon-white',
+      'man-5r', 'man-6', 'man-7',
+      'wind-east', 'wind-east'
+    ];
+    const melds = findMelds(tiles);
+
+    test('it returns big three dragons', () => {
+      // @ts-expect-error
+      const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+      expect(result).toStrictEqual({ ok: true, score: 32000, yakuman: 'big-three-dragons'});
+    });
+  });
 });
