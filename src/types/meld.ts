@@ -8,11 +8,8 @@ type PairTupleNoDora = { [T in Tile]: [T, T] }[Tile];
 
 type PairTupleWithDora =
   | readonly ['pin-5r', 'pin-5']
-  | readonly ['pin-5', 'pin-5r']
   | readonly ['sou-5r', 'sou-5']
-  | readonly ['sou-5', 'sou-5r']
-  | readonly ['man-5r', 'man-5']
-  | readonly ['man-5', 'man-5r'];
+  | readonly ['man-5r', 'man-5'];
 
 type ChiTupleNoDora =
   | readonly ['pin-1', 'pin-2', 'pin-3']
@@ -52,30 +49,15 @@ type PonTupleNoDora = { [T in Tile]: [T, T, T] }[Tile];
 
 type PonTupleWithDora =
   | readonly ['pin-5r', 'pin-5', 'pin-5']
-  | readonly ['pin-5', 'pin-5r', 'pin-5']
-  | readonly ['pin-5', 'pin-5', 'pin-5r']
   | readonly ['sou-5r', 'sou-5', 'sou-5']
-  | readonly ['sou-5', 'sou-5r', 'sou-5']
-  | readonly ['sou-5', 'sou-5', 'sou-5r']
-  | readonly ['man-5r', 'man-5', 'man-5']
-  | readonly ['man-5', 'man-5r', 'man-5']
-  | readonly ['man-5', 'man-5', 'man-5r'];
+  | readonly ['man-5r', 'man-5', 'man-5'];
 
 type KanTupleNoDora = { [T in Tile]: [T, T, T, T] }[Tile];
 
 type KanTupleWithDora =
   | readonly ['pin-5r', 'pin-5', 'pin-5', 'pin-5']
-  | readonly ['pin-5', 'pin-5r', 'pin-5', 'pin-5']
-  | readonly ['pin-5', 'pin-5r', 'pin-5r', 'pin-5']
-  | readonly ['pin-5', 'pin-5r', 'pin-5r', 'pin-5r']
   | readonly ['sou-5r', 'sou-5', 'sou-5', 'sou-5']
-  | readonly ['sou-5', 'sou-5r', 'sou-5', 'sou-5']
-  | readonly ['sou-5', 'sou-5r', 'sou-5r', 'sou-5']
-  | readonly ['sou-5', 'sou-5r', 'sou-5r', 'sou-5r']
-  | readonly ['man-5r', 'man-5', 'man-5', 'man-5']
-  | readonly ['man-5', 'man-5r', 'man-5', 'man-5']
-  | readonly ['man-5', 'man-5r', 'man-5r', 'man-5']
-  | readonly ['man-5', 'man-5r', 'man-5r', 'man-5r'];
+  | readonly ['man-5r', 'man-5', 'man-5', 'man-5'];
 
 export type ChiTuple = ChiTupleNoDora | ChiTupleWithDora;
 export type PairTuple = PairTupleNoDora | PairTupleWithDora;
@@ -247,118 +229,85 @@ export const chiForNumber = (num: NumberTile): ReadonlyArray<Chi> => {
 };
 
 // TODO: Find out why this needs explicit casting?
-const pairMap: Record<Five, ReadonlyArray<PairTuple>> = {
-  'pin-5': [
-    ['pin-5', 'pin-5'],
-    ['pin-5r', 'pin-5'],
-    ['pin-5', 'pin-5r'],
-    ['pin-5r', 'pin-5r'],
-  ] as ReadonlyArray<PairTuple>,
-  'sou-5': [
-    ['sou-5', 'sou-5'],
-    ['sou-5r', 'sou-5'],
-    ['sou-5', 'sou-5r'],
-    ['sou-5r', 'sou-5r'],
-  ] as ReadonlyArray<PairTuple>,
-  'man-5': [
-    ['man-5', 'man-5'],
-    ['man-5r', 'man-5'],
-    ['man-5', 'man-5r'],
-    ['man-5r', 'man-5r'],
-  ] as ReadonlyArray<PairTuple>,
-} as const;
-
 export const pairForTile = (tile: Tile): ReadonlyArray<Pair> => {
   switch (tile) {
     case 'pin-5':
     case 'pin-5r':
-      return pairMap['pin-5'].map(t => ({ kind: 'pair', value: t}) as Pair);
+      return [
+        { kind: 'pair', value: [tile, tile]} as Pair,
+        { kind: 'pair', value: ['pin-5r', tile]} as Pair,
+      ];
     case 'sou-5':
     case 'sou-5r':
-      return pairMap['sou-5'].map(t => ({ kind: 'pair', value: t}) as Pair);
+      return [
+        { kind: 'pair', value: [tile, tile]} as Pair,
+        { kind: 'pair', value: ['sou-5r', tile]} as Pair,
+      ];
     case 'man-5':
     case 'man-5r':
-      return pairMap['man-5'].map(t => ({ kind: 'pair', value: t}) as Pair);
+      return [
+        { kind: 'pair', value: [tile, tile]} as Pair,
+        { kind: 'pair', value: ['man-5r', tile]} as Pair,
+      ];
     default:
-      return [{ kind: 'pair', value: [tile, tile]} as Pair];
+      return [
+        { kind: 'pair', value: [tile, tile]} as Pair,
+      ];
   }
 };
 
 // TODO: Find out why this needs explicit casting?
-const ponMap: Record<Five, ReadonlyArray<PonTuple>> = {
-  'pin-5': [
-    ['pin-5', 'pin-5', 'pin-5'],
-    ['pin-5r', 'pin-5', 'pin-5'],
-    ['pin-5', 'pin-5r', 'pin-5'],
-    ['pin-5', 'pin-5', 'pin-5r'],
-  ] as ReadonlyArray<PonTuple>,
-  'sou-5': [
-    ['sou-5', 'sou-5', 'sou-5'],
-    ['sou-5r', 'sou-5', 'sou-5'],
-    ['sou-5', 'sou-5r', 'sou-5'],
-    ['sou-5', 'sou-5', 'sou-5r'],
-  ] as ReadonlyArray<PonTuple>,
-  'man-5': [
-    ['man-5', 'man-5', 'man-5'],
-    ['man-5r', 'man-5', 'man-5'],
-    ['man-5', 'man-5r', 'man-5'],
-    ['man-5', 'man-5', 'man-5r'],
-  ] as ReadonlyArray<PonTuple>,
-} as const;
-
 export const ponForTile = (tile: Tile): ReadonlyArray<Pon> => {
   switch (tile) {
     case 'pin-5':
     case 'pin-5r':
-      return ponMap['pin-5'].map(t => ({ kind: 'pon', value: t}) as Pon);
+      return [
+        { kind: 'pon', value: [tile, tile, tile] } as Pon,
+        { kind: 'pon', value: ['pin-5r', tile, tile] } as Pon,
+      ];
     case 'sou-5':
     case 'sou-5r':
-      return ponMap['sou-5'].map(t => ({ kind: 'pon', value: t}) as Pon);
+      return [
+        { kind: 'pon', value: [tile, tile, tile] } as Pon,
+        { kind: 'pon', value: ['sou-5r', tile, tile] } as Pon,
+      ];
     case 'man-5':
     case 'man-5r':
-      return ponMap['man-5'].map(t => ({ kind: 'pon', value: t}) as Pon);
+      return [
+        { kind: 'pon', value: [tile, tile, tile] } as Pon,
+        { kind: 'pon', value: ['man-5r', tile, tile] } as Pon,
+      ];
     default:
-      return [{ kind: 'pon', value: [tile, tile, tile] } as Pon];
+      return [
+        { kind: 'pon', value: [tile, tile, tile] } as Pon,
+      ];
   }
 };
 
 // TODO: Find out why this needs explicit casting?
-const kanMap: Record<Five, ReadonlyArray<KanTuple>> = {
-  'pin-5': [
-    ['pin-5', 'pin-5', 'pin-5', 'pin-5'],
-    ['pin-5r', 'pin-5', 'pin-5', 'pin-5'],
-    ['pin-5', 'pin-5r', 'pin-5', 'pin-5'],
-    ['pin-5', 'pin-5', 'pin-5r', 'pin-5'],
-    ['pin-5', 'pin-5', 'pin-5', 'pin-5r'],
-  ] as ReadonlyArray<KanTuple>,
-  'sou-5': [
-    ['sou-5', 'sou-5', 'sou-5', 'sou-5'],
-    ['sou-5r', 'sou-5', 'sou-5', 'sou-5'],
-    ['sou-5', 'sou-5r', 'sou-5', 'sou-5'],
-    ['sou-5', 'sou-5', 'sou-5r', 'sou-5'],
-    ['sou-5', 'sou-5', 'sou-5', 'sou-5r'],
-  ] as ReadonlyArray<KanTuple>,
-  'man-5': [
-    ['man-5', 'man-5', 'man-5', 'man-5'],
-    ['man-5r', 'man-5', 'man-5', 'man-5'],
-    ['man-5', 'man-5r', 'man-5', 'man-5'],
-    ['man-5', 'man-5', 'man-5r', 'man-5'],
-    ['man-5', 'man-5', 'man-5', 'man-5r'],
-  ] as ReadonlyArray<KanTuple>,
-} as const;
-
 export const kanForTile = (tile: Tile): ReadonlyArray<Kan> => {
   switch (tile) {
     case 'pin-5':
     case 'pin-5r':
-      return kanMap['pin-5'].map(t => ({ kind: 'kan', value: t}) as Kan);
+      return [
+        { kind: 'kan', value: [tile, tile, tile, tile] } as Kan,
+        { kind: 'kan', value: ['pin-5r', tile, tile, tile] } as Kan,
+      ];
     case 'sou-5':
     case 'sou-5r':
-      return kanMap['sou-5'].map(t => ({ kind: 'kan', value: t}) as Kan);
+      return [
+        { kind: 'kan', value: [tile, tile, tile, tile] } as Kan,
+        { kind: 'kan', value: ['sou-5r', tile, tile, tile] } as Kan,
+      ];
     case 'man-5':
     case 'man-5r':
-      return kanMap['man-5'].map(t => ({ kind: 'kan', value: t}) as Kan);
+      return [
+        { kind: 'kan', value: [tile, tile, tile, tile] } as Kan,
+        { kind: 'kan', value: ['man-5r', tile, tile, tile] } as Kan,
+      ];
     default:
-      return [{ kind: 'kan', value: [tile, tile, tile, tile] } as Kan];
+      return [
+        { kind: 'kan', value: [tile, tile, tile, tile] } as Kan,
+      ];
   }
 };
