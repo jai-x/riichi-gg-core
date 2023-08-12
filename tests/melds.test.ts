@@ -65,6 +65,26 @@ describe('findMelds', () => {
     arrayMatch(findMelds(tiles), melds);
   });
 
+  test('dont break chis', () => {
+    const tiles: ReadonlyArray<Tile> = shuffle([
+      'pin-1', 'pin-2', 'pin-3',
+      'pin-2', 'pin-3', 'pin-4',
+      'pin-3', 'pin-4', 'pin-5',
+      'dragon-green', 'dragon-green', 'dragon-green',
+      'pin-4', 'pin-4'
+    ]);
+
+    const melds: ReadonlyArray<Meld> = [
+      { kind: 'chi', value: [ 'pin-1', 'pin-2', 'pin-3' ] },
+      { kind: 'chi', value: [ 'pin-2', 'pin-3', 'pin-4' ] },
+      { kind: 'chi', value: [ 'pin-3', 'pin-4', 'pin-5' ] },
+      { kind: 'pon', value: [ 'dragon-green', 'dragon-green', 'dragon-green' ] },
+      { kind: 'pair', value: [ 'pin-4', 'pin-4' ] },
+    ];
+
+    arrayMatch(findMelds(tiles), melds);
+  });
+
   test('seven pairs', () => {
     const tiles: ReadonlyArray<Tile> = shuffle([
       'pin-1', 'pin-1',
@@ -106,28 +126,57 @@ describe('findMelds', () => {
     arrayMatch(findMelds(tiles), melds);
   });
 
-  test('nine gates', () => {
-    const tiles: ReadonlyArray<Tile> = shuffle([
-      'pin-1', 'pin-1', 'pin-1',
-      'pin-2',
-      'pin-3',
-      'pin-4',
-      'pin-5',
-      'pin-6',
-      'pin-7',
-      'pin-8',
-      'pin-9', 'pin-9', 'pin-9',
-      'pin-5r',
-    ]);
+  describe('nine gates', () => {
+    test('when agari is not 1 or 9', () => {
+      const tiles: ReadonlyArray<Tile> = shuffle([
+        'pin-1', 'pin-1', 'pin-1',
+        'pin-2',
+        'pin-3',
+        'pin-4',
+        'pin-5',
+        'pin-6',
+        'pin-7',
+        'pin-8',
+        'pin-9', 'pin-9', 'pin-9',
 
-    const expectedMelds: ReadonlyArray<Meld> = [
-      { kind: 'pon', value: [ 'pin-1', 'pin-1', 'pin-1' ] },
-      { kind: 'pon', value: [ 'pin-9', 'pin-9', 'pin-9' ] },
-      { kind: 'pair', value: [ 'pin-5r', 'pin-5' ] },
-      { kind: 'chi', value: [ 'pin-2', 'pin-3', 'pin-4' ] },
-      { kind: 'chi', value: [ 'pin-6', 'pin-7', 'pin-8' ] },
-    ];
+        'pin-5r',
+      ]);
 
-    arrayMatch(findMelds(tiles), expectedMelds);
+      const expectedMelds: ReadonlyArray<Meld> = [
+        { kind: 'pon', value: [ 'pin-1', 'pin-1', 'pin-1' ] },
+        { kind: 'pon', value: [ 'pin-9', 'pin-9', 'pin-9' ] },
+        { kind: 'pair', value: [ 'pin-5r', 'pin-5' ] },
+        { kind: 'chi', value: [ 'pin-2', 'pin-3', 'pin-4' ] },
+        { kind: 'chi', value: [ 'pin-6', 'pin-7', 'pin-8' ] },
+      ];
+
+      arrayMatch(findMelds(tiles), expectedMelds);
+    });
+
+    test('when agari is 1', () => {
+      const tiles: ReadonlyArray<Tile> = shuffle([
+        'pin-1', 'pin-1', 'pin-1',
+        'pin-2',
+        'pin-3',
+        'pin-4',
+        'pin-5',
+        'pin-6',
+        'pin-7',
+        'pin-8',
+        'pin-9', 'pin-9', 'pin-9',
+
+        'pin-1',
+      ]);
+
+      const expectedMelds: ReadonlyArray<Meld> = [
+        { kind: 'pon', value: [ 'pin-1', 'pin-1', 'pin-1' ] },
+        { kind: 'pair', value: [ 'pin-9', 'pin-9' ] },
+        { kind: 'chi', value: [ 'pin-1', 'pin-2', 'pin-3' ] },
+        { kind: 'chi', value: [ 'pin-4', 'pin-5', 'pin-6' ] },
+        { kind: 'chi', value: [ 'pin-7', 'pin-8', 'pin-9' ] },
+      ];
+
+      arrayMatch(findMelds(tiles), expectedMelds);
+    });
   });
 });

@@ -1,3 +1,6 @@
+import { equals } from 'ramda';
+import { Tile } from "./types/tile";
+
 export const removeFirstInstance = <T>(input: ReadonlyArray<T>, elem: T): ReadonlyArray<T> => {
   const idx = input.indexOf(elem);
   if (idx < 0) {
@@ -20,3 +23,14 @@ export const arrayCmp = <T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>): boolean =
   return true;
 }
 
+export const isThirteenOrphans = (tiles: ReadonlyArray<Tile>): boolean => {
+  const thirteenOrphansSet: Set<Tile> = new Set([
+    'man-1', 'man-9',
+    'pin-1', 'pin-9',
+    'sou-1', 'sou-9',
+    'wind-east', 'wind-south', 'wind-west', 'wind-north',
+    'dragon-green', 'dragon-red', 'dragon-white',
+  ]);
+
+  return tiles.length === 14 && equals(thirteenOrphansSet, new Set(tiles));
+}
