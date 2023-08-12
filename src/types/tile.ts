@@ -53,6 +53,23 @@ export const terminalTiles = [
   manTiles[9],
 ] as const;
 
+export const fiveTilesNoDora = [
+  pinTiles[4],
+  souTiles[4],
+  manTiles[4],
+];
+
+export const fiveTilesWithDora = [
+  pinTiles[5],
+  souTiles[5],
+  manTiles[5],
+];
+
+export const fiveTiles = [
+  ...fiveTilesNoDora,
+  ...fiveTilesWithDora,
+];
+
 export const dragonTiles = [
   'dragon-white',
   'dragon-green',
@@ -80,11 +97,14 @@ export const allTiles = [
 export type PinTile      = typeof pinTiles[number];
 export type SouTile      = typeof souTiles[number];
 export type ManTile      = typeof manTiles[number];
-export type NumberTile   = PinTile | SouTile | ManTile;
-export type Five         = typeof pinTiles[4] | typeof souTiles[4] | typeof manTiles[4];
 
+export type NumberTile   = PinTile | SouTile | ManTile;
 export type TerminalTile = typeof terminalTiles[number];
 export type SimpleTile   = Exclude<NumberTile, TerminalTile>;
+
+export type FiveTileNoDora   = typeof fiveTilesNoDora[number];
+export type FiveTileWithDora = typeof fiveTilesWithDora[number];
+export type FiveTile         = FiveTileNoDora | FiveTileWithDora;
 
 export type DragonTile   = typeof dragonTiles[number];
 export type WindTile     = typeof windTiles[number];
@@ -96,9 +116,15 @@ export type Tile         = NumberTile | HonourTile;
 export const isPin      = (tile: Tile): boolean => pinTiles.includes(tile as PinTile);
 export const isSou      = (tile: Tile): boolean => souTiles.includes(tile as SouTile);
 export const isMan      = (tile: Tile): boolean => manTiles.includes(tile as ManTile);
+
 export const isNumber   = (tile: Tile): boolean => numberTiles.includes(tile as NumberTile);
 export const isTerminal = (tile: Tile): boolean => terminalTiles.includes(tile as TerminalTile);
 export const isSimple   = (tile: Tile): boolean => !isTerminal(tile);
-export const isWind     = (tile: Tile): boolean => windTiles.includes(tile as WindTile);
+
+export const isFiveNoDora   = (tile: Tile): boolean => fiveTilesNoDora.includes(tile as FiveTileNoDora);
+export const isFiveWithDora = (tile: Tile): boolean => fiveTilesWithDora.includes(tile as FiveTileWithDora);
+export const isFive         = (tile: Tile): boolean => fiveTiles.includes(tile as FiveTile);
+
 export const isDragon   = (tile: Tile): boolean => dragonTiles.includes(tile as DragonTile);
+export const isWind     = (tile: Tile): boolean => windTiles.includes(tile as WindTile);
 export const isHonour   = (tile: Tile): boolean => honourTiles.includes(tile as HonourTile);
