@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 
 import { Tile, isDragon, isHonour, isTerminal, isWind } from './types/tile';
-import { Meld, Pair, Pon } from './types/meld';
+import { Meld } from './types/meld';
 import { CalculateParams } from './calculate';
 import { removeFirstInstance, arrayCmp, isThirteenOrphansTiles } from './helpers';
 

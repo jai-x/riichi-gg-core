@@ -1,4 +1,4 @@
-import { Tile, NumberTile, Five }  from './tile';
+import { Tile, NumberTile }  from './tile';
 
 // Types declared in this form are indexed distrubted types.
 // See explanation here: https://stackoverflow.com/questions/76561056
