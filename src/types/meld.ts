@@ -1,4 +1,4 @@
-import { Tile, NumberTile }  from './tile';
+import { Tile, NumberTile, HonourTile, TerminalTile }  from './tile';
 
 // Types declared in this form are indexed distrubted types.
 // See explanation here: https://stackoverflow.com/questions/76561056
@@ -64,12 +64,22 @@ export type PairTuple = PairTupleNoDora | PairTupleWithDora;
 export type PonTuple = PonTupleNoDora | PonTupleWithDora;
 export type KanTuple = KanTupleNoDora | KanTupleWithDora;
 
+export type ThirteenOrphansTuple = readonly [
+  'man-1', 'man-9',
+  'pin-1', 'pin-9',
+  'sou-1', 'sou-9',
+  'wind-east', 'wind-south', 'wind-west', 'wind-north',
+  'dragon-green', 'dragon-red', 'dragon-white',
+  HonourTile | TerminalTile,
+];
+
 export type Pair = { kind: 'pair', value: PairTuple };
 export type Chi = { kind: 'chi', value: ChiTuple };
 export type Pon = { kind: 'pon', value: PonTuple };
 export type Kan = { kind: 'kan', value: KanTuple };
+export type ThirteenOrphans = { kind: 'thirteen-orphans', value: ThirteenOrphansTuple };
 
-export type Meld = Pair | Pon | Chi | Kan;
+export type Meld = Pair | Pon | Chi | Kan | ThirteenOrphans;
 
 const chiMap: Record<NumberTile, ReadonlyArray<ChiTuple>> = {
   'pin-1': [

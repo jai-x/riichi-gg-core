@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 
 import { NumberTile, Tile, isNumber } from './types/tile';
-import { Meld, kanForTile, ponForTile, pairForTile, chiForNumber, Kan, Pair, Pon, Chi } from './types/meld';
+import { Meld, kanForTile, ponForTile, pairForTile, chiForNumber, Kan, Pair, Pon, Chi, ThirteenOrphansTuple } from './types/meld';
 import { isThirteenOrphansTiles } from './helpers';
 
 class MeldSearchNodeQueue {
@@ -53,7 +53,7 @@ export const findMelds = (tiles: ReadonlyArray<Tile>): ReadonlyArray<Meld> => {
   const candidateMelds = findCandidateMelds(tiles);
   // Thirteen orphans only has one meld (the pair)
   if (candidateMelds.length === 1 && isThirteenOrphansTiles(tiles)) {
-    return candidateMelds;
+    return [{ kind: 'thirteen-orphans', value: tiles as ThirteenOrphansTuple }];
   }
 
   const winningMelds: Meld[][] = [];

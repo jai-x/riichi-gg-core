@@ -1,7 +1,7 @@
 import { shuffle, arrayMatch } from './helpers';
 
 import { Tile } from '../src/types/tile';
-import { Meld } from '../src/types/meld';
+import { Meld, ThirteenOrphansTuple } from '../src/types/meld';
 import { findMelds } from '../src/melds';
 
 describe('findMelds', () => {
@@ -120,7 +120,7 @@ describe('findMelds', () => {
     ]);
 
     const melds: ReadonlyArray<Meld> = [
-      { kind: 'pair', value: [ 'pin-1', 'pin-1' ] }
+      { kind: 'thirteen-orphans', value: tiles as ThirteenOrphansTuple }
     ];
 
     arrayMatch(findMelds(tiles), melds);

@@ -30,7 +30,7 @@ const DEALER_SCORE     = 48_000;
 const NON_DEALER_SCORE = 32_000;
 
 const isThirteenOrphans = ({ tiles, melds, params }: YakumanCheckerParams): boolean =>
-  !params.winState.open && isThirteenOrphansTiles(tiles);
+  !params.winState.open && melds.length === 1 && melds[0].kind === 'thirteen-orphans'
 
 const isFourConcealedTriplets = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
   const pairs = melds.filter((meld) => ['pair'].includes(meld.kind));
