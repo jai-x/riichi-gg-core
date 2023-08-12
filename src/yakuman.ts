@@ -1,5 +1,7 @@
+import * as R from 'ramda';
+
 import { Tile, isDragon, isHonour, isTerminal, isWind } from './types/tile';
-import { Meld } from './types/meld';
+import { Meld, Pair, Pon } from './types/meld';
 import { CalculateParams } from './calculate';
 import { removeFirstInstance, arrayCmp, isThirteenOrphansTiles } from './helpers';
 
@@ -93,7 +95,63 @@ const isAllGreens = ({ tiles, melds, params }: YakumanCheckerParams): boolean =>
 }
 
 const isNineGates = ({ tiles, melds, params }: YakumanCheckerParams): boolean => {
-  // TODO: Implement
+  if (params.winState.open) {
+    return false;
+  }
+
+  if (melds.length !== 5) {
+    return false;
+  }
+
+  if (tiles.length !== 14) {
+    return false;
+  }
+
+  if (melds.some((meld) => meld.kind === 'kan')) {
+    return false;
+  }
+
+  const findTileToRemove = (tiles: ReadonlyArray<Tile>): Tile | null => {
+    const counts = R.countBy((tile) => String(tile))(tiles);
+
+    const fourTiles = R.filter((count: number) => count === 4)(counts);
+    if (R.keys(fourTiles).length === 1) {
+      return R.keys(fourTiles)[0] as Tile;
+    }
+
+    const twoTiles = R.filter((count: number) => count === 2)(counts);
+    if (R.keys(twoTiles).length === 1) {
+      return R.keys(twoTiles)[0] as Tile;
+    }
+
+    for (const dora of ['pin-5r', 'sou-5r', 'man-5r'] as Tile[]) {
+      if (R.keys(counts).includes(dora)) {
+        return dora;
+      }
+    }
+
+    return null;
+  }
+
+  const tileToRemove = findTileToRemove(tiles);
+  if (!tileToRemove) {
+    return false
+  }
+
+  const tilesToTest = [...removeFirstInstance(tiles, tileToRemove)].sort();
+
+  const nineGatesTileSet: ReadonlyArray<ReadonlyArray<Tile>> = [
+    ['pin-1', 'pin-1', 'pin-1', 'pin-2', 'pin-3', 'pin-4', 'pin-5', 'pin-6', 'pin-7', 'pin-8', 'pin-9', 'pin-9', 'pin-9'],
+    ['sou-1', 'sou-1', 'sou-1', 'sou-2', 'sou-3', 'sou-4', 'sou-5', 'sou-6', 'sou-7', 'sou-8', 'sou-9', 'sou-9', 'sou-9'],
+    ['man-1', 'man-1', 'man-1', 'man-2', 'man-3', 'man-4', 'man-5', 'man-6', 'man-7', 'man-8', 'man-9', 'man-9', 'man-9'],
+  ] as const;
+
+  for (const nineGatesTiles of nineGatesTileSet) {
+    if (arrayCmp(tilesToTest, nineGatesTiles)) {
+      return true;
+    }
+  }
+
   return false;
 }
 

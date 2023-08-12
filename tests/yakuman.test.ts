@@ -168,4 +168,86 @@ describe('findYakuman', () => {
       });
     });
   });
+
+  describe('nine gates', () => {
+    const hand: Tile[] = [
+      'pin-1', 'pin-1', 'pin-1',
+      'pin-2',
+      'pin-3',
+      'pin-4',
+      'pin-5',
+      'pin-6',
+      'pin-7',
+      'pin-8',
+      'pin-9', 'pin-9', 'pin-9',
+    ];
+
+    describe('when agari is a one', () => {
+      const agari: Tile = 'pin-1';
+      const tiles = hand.concat(agari);
+      const melds = findMelds(tiles);
+
+      test('it returns nine gates', () => {
+        // @ts-expect-error
+        const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+        expect(result).toStrictEqual({
+          ok: true,
+          score: 32000,
+          yakuman: ['nine-gates'],
+        });
+      });
+    });
+
+    describe('when agari is a nine', () => {
+      const agari: Tile = 'pin-9';
+      const tiles = hand.concat(agari);
+      const melds = findMelds(tiles);
+
+      test('it returns nine gates', () => {
+        // @ts-expect-error
+        const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+        expect(result).toStrictEqual({
+          ok: true,
+          score: 32000,
+          yakuman: ['nine-gates'],
+        });
+      });
+    });
+
+    describe('when agari is a simple', () => {
+      const agari: Tile = 'pin-7';
+      const tiles = hand.concat(agari);
+      const melds = findMelds(tiles);
+
+      test('it returns nine gates', () => {
+        // @ts-expect-error
+        const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+        expect(result).toStrictEqual({
+          ok: true,
+          score: 32000,
+          yakuman: ['nine-gates'],
+        });
+      });
+    });
+
+    describe('when agari is a red five', () => {
+      const agari: Tile = 'pin-5r';
+      const tiles = hand.concat(agari);
+      const melds = findMelds(tiles);
+
+      test('it returns nine gates', () => {
+        // @ts-expect-error
+        const result = findYakuman(tiles, melds, { dealer: false, winState: { open: false }});
+
+        expect(result).toStrictEqual({
+          ok: true,
+          score: 32000,
+          yakuman: ['nine-gates'],
+        });
+      });
+    });
+  });
 });
