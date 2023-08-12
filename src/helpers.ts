@@ -23,7 +23,7 @@ export const arrayCmp = <T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>): boolean =
   return true;
 }
 
-export const isThirteenOrphans = (tiles: ReadonlyArray<Tile>): boolean => {
+export const isThirteenOrphansTiles = (tiles: ReadonlyArray<Tile>): boolean => {
   const thirteenOrphansSet: Set<Tile> = new Set([
     'man-1', 'man-9',
     'pin-1', 'pin-9',
