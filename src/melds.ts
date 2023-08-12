@@ -52,7 +52,7 @@ const meldsCmp = (a: ReadonlyArray<Meld>, b: ReadonlyArray<Meld>): boolean => {
 export const findMelds = (tiles: ReadonlyArray<Tile>): ReadonlyArray<Meld> => {  
   const candidateMelds = findCandidateMelds(tiles);
   // Thirteen orphans only has one meld (the pair)
-  if (isThirteenOrphansTiles(tiles) && candidateMelds.length === 1) {
+  if (candidateMelds.length === 1 && isThirteenOrphansTiles(tiles)) {
     return candidateMelds;
   }
 
