@@ -2,7 +2,7 @@ import * as R from 'ramda';
 
 import { NumberTile, Tile, isNumber } from './types/tile';
 import { Meld, kanForTile, ponForTile, pairForTile, chiForNumber, Kan, Pair, Pon, Chi, ThirteenOrphansTuple } from './types/meld';
-import { isThirteenOrphansTiles } from './helpers';
+import { deDora, isThirteenOrphansTiles } from './helpers';
 
 class MeldSearchNodeQueue {
   #queue: MeldSearchNode[];
@@ -178,15 +178,6 @@ const tileDuplicates = (tiles: ReadonlyArray<Tile>, min: number): ReadonlyArray<
     R.keys,
     R.map((key: string) => key as Tile),
   )(tiles);
-
-const deDora = (tile: Tile): Tile => {
-  const doraMap: Map<Tile, Tile> = new Map([
-    ['pin-5r', 'pin-5'],
-    ['sou-5r', 'sou-5'],
-    ['man-5r', 'man-5'],
-  ]);
-  return doraMap.get(tile) || tile;
-}
 
 export const removeMeldTiles = (tiles: ReadonlyArray<Tile>, meld: Meld): ReadonlyArray<Tile> => {
   const removeIndexes: Set<number> = new Set();

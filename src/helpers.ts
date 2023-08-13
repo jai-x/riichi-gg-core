@@ -34,3 +34,12 @@ export const isThirteenOrphansTiles = (tiles: ReadonlyArray<Tile>): boolean => {
 
   return tiles.length === 14 && equals(thirteenOrphansSet, new Set(tiles));
 }
+
+export const deDora = (tile: Tile): Tile => {
+  const doraMap: Map<Tile, Tile> = new Map([
+    ['pin-5r', 'pin-5'],
+    ['sou-5r', 'sou-5'],
+    ['man-5r', 'man-5'],
+  ]);
+  return doraMap.get(tile) || tile;
+}
