@@ -128,7 +128,7 @@ export const findMelds = (tiles: ReadonlyArray<Tile>): ReadonlyArray<Meld> => {
   }
 
   if (winningMelds.length === 0) {
-    throw Error('Weird hand');
+    return []; // Invalid hand
   }
 
   if (winningMelds.length === 1) {
