@@ -1,7 +1,6 @@
 import { sample } from './helpers';
 
 import { Tile } from '../src/types/tile';
-// import { Meld } from '../src/types/meld';
 import { findYakuman } from '../src/yakuman';
 import { findMelds } from '../src/melds';
 
