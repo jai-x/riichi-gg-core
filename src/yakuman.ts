@@ -3,31 +3,13 @@ import * as R from 'ramda';
 import { Tile, isDragon, isHonour, isTerminal, isWind } from './types/tile';
 import { Meld } from './types/meld';
 import { CalculateParams } from './calculate';
-import { removeFirstInstance, arrayCmp, isThirteenOrphansTiles } from './helpers';
-
-export type Yakuman =
-  | 'thirteen-orphans'
-  | 'four-concealed-triplets'
-  | 'big-three-dragons'
-  | 'little-four-winds'
-  | 'big-four-winds'
-  | 'all-honours'
-  | 'all-terminals'
-  | 'all-greens'
-  | 'nine-gates';
-
-export type YakumanResult =
-  | { ok: false }
-  | { ok: true, score: number, yakuman: ReadonlyArray<Yakuman> };
+import { removeFirstInstance, arrayCmp } from './helpers';
 
 interface YakumanCheckerParams {
   tiles: ReadonlyArray<Tile>;
   melds: ReadonlyArray<Meld>;
   params: CalculateParams;
 }
-
-const DEALER_SCORE     = 48_000;
-const NON_DEALER_SCORE = 32_000;
 
 const isThirteenOrphans = ({ tiles, melds, params }: YakumanCheckerParams): boolean =>
   !params.winState.open && melds.length === 1 && melds[0].kind === 'thirteen-orphans'
@@ -155,7 +137,22 @@ const isNineGates = ({ tiles, melds, params }: YakumanCheckerParams): boolean =>
   return false;
 }
 
-const yakumanCheckers: Record<Yakuman, (y: YakumanCheckerParams) => boolean> = {
+type YakumanName =
+  | 'thirteen-orphans'
+  | 'four-concealed-triplets'
+  | 'big-three-dragons'
+  | 'little-four-winds'
+  | 'big-four-winds'
+  | 'all-honours'
+  | 'all-terminals'
+  | 'all-greens'
+  | 'nine-gates';
+
+export type Yakuman = { score: number, name: YakumanName }
+
+type YakumanChecker = (y: YakumanCheckerParams) => boolean;
+
+const yakumanCheckers: Record<YakumanName, YakumanChecker> = {
   'thirteen-orphans': isThirteenOrphans,
   'four-concealed-triplets': isFourConcealedTriplets,
   'big-three-dragons': isBigThreeDragons,
@@ -167,30 +164,19 @@ const yakumanCheckers: Record<Yakuman, (y: YakumanCheckerParams) => boolean> = {
   'nine-gates': isNineGates,
 } as const;
 
+const DEALER_SCORE     = 48_000 as const;
+const NON_DEALER_SCORE = 32_000 as const;
+
 export const findYakuman = (
   tiles: ReadonlyArray<Tile>,
   melds: ReadonlyArray<Meld>,
   params: CalculateParams,
-): YakumanResult => {
-  let finalScore = 0;
-  let finalYakuman: Yakuman[] = [];
-  
-  for (const key in yakumanCheckers) {
-    const yakuman = key as Yakuman;
-    const checker = yakumanCheckers[yakuman];
-    const found = checker({tiles, melds, params });
-    
-    if (found) {
-      const score = params.dealer ? DEALER_SCORE : NON_DEALER_SCORE;
-
-      finalScore += score;
-      finalYakuman.push(yakuman);
-    }
-  }
-
-  if (!finalScore) {
-    return { ok: false };
-  }
-
-  return { ok: true, score: finalScore, yakuman: finalYakuman };
-};
+): ReadonlyArray<Yakuman> =>
+  R.pipe(
+    R.filter((checker: YakumanChecker) => checker({tiles, melds, params})),
+    R.keys,
+    R.map((name: string) => ({
+      name: (name as YakumanName),
+      score: params.dealer ? DEALER_SCORE : NON_DEALER_SCORE,
+    }))
+  )(yakumanCheckers);
