@@ -20,5 +20,33 @@ describe('input validation', () => {
 
       expect(result).toStrictEqual({ ok: false, message: 'tiles-too-many' });
     });
+
+    test('not tiles', () => {
+      const notTiles = Array.from({ length: 15 }, () => 'foo-1');
+
+      // @ts-expect-error
+      const result = calculate(notTiles, {});
+
+      expect(result).toStrictEqual({ ok: false, message: 'tiles-invalid' });
+    });
+
+    test('invalid hand', () => {
+      const badHand: ReadonlyArray<Tile> = Array.from({ length: 14 }, () => 'pin-1');
+
+      // @ts-expect-error
+      const result = calculate(badHand, {});
+
+      expect(result).toStrictEqual({ ok: false, message: 'tiles-invalid' });
+    });
   });
+
+  describe('param validation', () => {
+    test.todo('param validation tests');
+  });
+});
+
+describe('results', () => {
+  test.todo('yakuman hand');
+
+  test.todo('normal hand with han');
 });

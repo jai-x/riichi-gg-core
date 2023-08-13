@@ -1,11 +1,14 @@
+import * as R from 'ramda';
+
 import { Tile, allTiles } from './types/tile';
 import { findMelds } from './melds';
-import { findYakuman } from './yakuman';
+// import { findYakuman } from './yakuman';
+import { deDora } from './helpers';
 
 export type Error =
-  | 'tiles-invalid'
-  | 'tiles-too-few'
-  | 'tiles-too-many';
+  | TileError
+  | ParamsError
+  | 'hand-invalid';
 
 export type CalculateResult =
   | { ok: false, message: Error }
@@ -29,20 +32,64 @@ export type CalculateParams = {
 const err = (e: Error): CalculateResult => ({ ok: false, message: e });
 
 export const calculate = (tiles: ReadonlyArray<Tile>, params: CalculateParams): CalculateResult => {
-  if (tiles.length < 14) {
-    return err('tiles-too-few');
+  const tileError = validateTiles(tiles);
+  if (tileError) {
+    return err(tileError);
   }
 
-  if (tiles.length > 18) {
-    return err('tiles-too-many');
-  }
-
-  if (!tiles.every(t => allTiles.includes(t))) {
-    return err('tiles-invalid');
+  const paramError = validateParams(params);
+  if (paramError) {
+    return err('params-invalid')
   }
 
   const melds = findMelds(tiles);
-  const yakuman = findYakuman(tiles, melds, params);
+  if (melds.length === 0) {
+    return err('hand-invalid');
+  }
+
+  // const yakuman = findYakuman(tiles, melds, params);
 
   throw new Error('Not implemented!');
 };
+
+type TileError =
+  | 'tiles-invalid'
+  | 'tiles-too-few'
+  | 'tiles-too-many';
+
+const validateTiles = (tiles: ReadonlyArray<Tile>): TileError | null => {
+  if (tiles.length < 14) {
+    return 'tiles-too-few';
+  }
+
+  if (tiles.length > 18) {
+    return 'tiles-too-many';
+  }
+
+  if (!tiles.every(t => allTiles.includes(t))) {
+    return 'tiles-invalid';
+  }
+
+  const numTilesAboveFour = R.pipe(
+    R.map(deDora),
+    R.countBy((tile: Tile) => String(tile)),
+    R.filter((count: number) => count > 4),
+    R.keys,
+    R.map((tileStr: string) => tileStr as Tile),
+    R.length,
+  )(tiles);
+
+  if (numTilesAboveFour) {
+    return 'tiles-invalid';
+  }
+
+  return null;
+} 
+
+
+type ParamsError =
+  | 'params-invalid';
+
+export const validateParams = (params: CalculateParams): ParamsError | null => {
+  return null;
+}
