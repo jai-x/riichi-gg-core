@@ -16,15 +16,24 @@ const isRiichi = ({ tiles, melds, params }: YakuCheckerParams): number =>
 const isIppatsu = ({ tiles, melds, params }: YakuCheckerParams): number =>
   !params.winState.open && params.winState.riichi && params.winState.ippatsu ? 1 : 0;
 
+const isSevenPairs = ({ tiles, melds, params }: YakuCheckerParams): number => {
+  const fourteenTiles = tiles.length === 14;
+  const sevenPairs = melds.filter((meld) => meld.kind === 'pair').length === 7;
+  const closed = !params.winState.open;
+  return closed && sevenPairs && fourteenTiles ? 2 : 0;
+}
+
 type YakuName =
   | 'riichi'
-  | 'ippatsu';
+  | 'ippatsu'
+  | 'seven-pairs';
 
 type YakuChecker = (y: YakuCheckerParams) => number;
 
 const yakuCheckers: Record<YakuName, YakuChecker> = {
   'riichi': isRiichi,
   'ippatsu': isIppatsu,
+  'seven-pairs': isSevenPairs,
 } as const;
 
 export type Yaku = { han: number, name: YakuName };
