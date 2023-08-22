@@ -1,4 +1,4 @@
-import { WinState } from "../src/calculate";
+import { CalculateParams, WinState } from "../src/calculate";
 import { findMelds } from "../src/melds";
 import { Tile } from "../src/types/tile";
 import { findYaku } from "../src/yaku";
@@ -6,7 +6,7 @@ import { findYaku } from "../src/yaku";
 describe('findYaku', () => {
   describe('when riichi', () => {
     it('returns riichi with 1 han', () => {
-      const winState: WinState = { open: false, draw: 'tsumo', riichi: true, ippatsu: false }
+      const winState: WinState = { open: false, draw: 'ron', riichi: true, ippatsu: false }
 
       // @ts-expect-error
       const result = findYaku([], [], { winState });
@@ -19,7 +19,7 @@ describe('findYaku', () => {
 
   describe('when riichi ippatsu', () => {
     it('returns riichi and ippatsu with 1 han', () => {
-      const winState: WinState = { open: false, draw: 'tsumo', riichi: true, ippatsu: true }
+      const winState: WinState = { open: false, draw: 'ron', riichi: true, ippatsu: true }
 
       // @ts-expect-error
       const result = findYaku([], [], { winState });
@@ -42,7 +42,7 @@ describe('findYaku', () => {
       'dragon-green', 'dragon-green',
     ];
     const melds = findMelds(tiles);
-    const winState: WinState = { open: false, draw: 'tsumo', riichi: false };
+    const winState: WinState = { open: false, draw: 'ron', riichi: false };
 
     it('returns seven pairs with 2 han', () => {
       // @ts-expect-error
@@ -50,6 +50,19 @@ describe('findYaku', () => {
 
       expect(result).toStrictEqual([
         { han: 2, name: 'seven-pairs' },
+      ]);
+    });
+  });
+
+  describe('when tsumo', () => {
+    const winState: WinState = { open: false, draw: 'tsumo', riichi: false };
+    const params: CalculateParams = { dealer: false, winState: winState };
+
+    it('returns tsumo with 1 han', () => {
+      const result = findYaku([], [], params);
+
+      expect(result).toStrictEqual([
+        { han: 1, name: 'tsumo' },
       ]);
     });
   });
