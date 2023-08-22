@@ -56,10 +56,10 @@ describe('findYaku', () => {
 
   describe('when tsumo', () => {
     const winState: WinState = { open: false, draw: 'tsumo', riichi: false };
-    const params: CalculateParams = { dealer: false, winState: winState };
 
     it('returns tsumo with 1 han', () => {
-      const result = findYaku([], [], params);
+      // @ts-expect-error
+      const result = findYaku([], [], { winState });
 
       expect(result).toStrictEqual([
         { han: 1, name: 'tsumo' },

@@ -27,6 +27,7 @@ export type WinState =
 export type CalculateParams = {
   dealer: boolean,
   winState: WinState,
+  agari: Tile,
 };
 
 const err = (e: Error): CalculateResult => ({ ok: false, message: e });
