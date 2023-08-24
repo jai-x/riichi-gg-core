@@ -66,4 +66,25 @@ describe('findYaku', () => {
       ]);
     });
   });
+
+  describe('when pinfu', () => {
+    const winState: WinState = { open: false, draw: 'ron', riichi: false };
+    const params: CalculateParams = { dealer: false, winState: winState, agari: 'man-1' };
+    const tiles: Tile[] = [
+      'man-5', 'man-5r',
+      'man-1', 'man-2', 'man-3',
+      'pin-2', 'pin-3', 'pin-4',
+      'pin-7', 'pin-8', 'pin-9',
+      'sou-4', 'sou-5', 'sou-6',
+    ];
+    const melds = findMelds(tiles);
+
+    it('returns tsumo with 1 han', () => {
+      const result = findYaku(tiles, melds, params);
+
+      expect(result).toStrictEqual([
+        { han: 1, name: 'pinfu' },
+      ]);
+    });
+  });
 });
